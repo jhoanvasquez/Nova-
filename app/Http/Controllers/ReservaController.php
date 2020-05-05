@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Reserva;
-use Carbon\Carbon;
+use App\inventario;
+
 
 
 
@@ -28,7 +29,7 @@ class ReservaController extends Controller
     public function index()
     {
         $reserva = DB::table('reservas')
-        ->orderBy("id","ASC")
+        ->orderBy("date","ASC")
         ->join('usuarios', 'reservas.usuario', '=', 'usuarios.usuario')
         ->paginate(10);
         return view("consulta-reserva")->with("reserva",$reserva);
@@ -53,23 +54,46 @@ class ReservaController extends Controller
         
     }
 
+    public function inventario()
+    {   
+        
+        $inventario =inventario::find(1);
+        return view("inventario")
+        ->with("inventario", $inventario);
+        
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function guardar(Request $request)
     {
-        $reserva = $request->except("_token");
-        Reserva::insert($reserva);
-        return view("confirmacion");
+       
+        $validate = $request->validate([
+            "usuario"=> "required ",
+            "date" => "required",
+            "hora" => "required",
+        ]);
+
+
+        $insert = DB::table('reservas')->insert([
+            "date" =>   $date,
+            "hora" =>   $hora,
+            "usuario" =>   $usuario,
+         ]);
+
+         return [$request, $request->hora];
+        //return explode("=",utf8_decode(urldecode($serial[2])))[1];
         
     }
 
     public function busqueda(Request $request)
     {
         $consultaReserva = DB::table('reservas')
+        ->orderBy("date","ASC")
         ->where('date',"=", $request->fecha)
         ->get();
         return $consultaReserva;
@@ -78,6 +102,7 @@ class ReservaController extends Controller
     public function busquedaReserva(Request $request)
     {
         $consultaReserva = DB::table('reservas')
+        ->orderBy("date","ASC")
         ->join('usuarios', 'reservas.usuario', '=', 'usuarios.usuario')
         ->where('date',"=", $request->fecha)
         ->get();
@@ -95,6 +120,7 @@ class ReservaController extends Controller
         date_default_timezone_set("America/Bogota");
         $date = date("Y-m-d");
         $users = DB::table('reservas')
+        ->orderBy("hora","ASC")
         ->join('usuarios', 'reservas.usuario', '=', 'usuarios.usuario')
         ->where('date',"=", $date)
         ->get();

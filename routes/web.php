@@ -17,7 +17,10 @@ Route::get('/', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/reserva/busqueda', "ReservaController@busqueda");
 Route::post('/user/busquedaUsuario', "UserController@busquedaUsuario");
 Route::post('/reserva/busquedaReserva', "ReservaController@busquedaReserva");
+Route::post('/reserva/guardar', "ReservaController@guardar");
+Route::post('/user/guardar', "UserController@guardar");
 Route::get('/reserva/today', "ReservaController@today");
+Route::get('/reserva/inventario', "ReservaController@inventario");
 
 
 

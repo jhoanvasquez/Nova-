@@ -1,5 +1,5 @@
 @extends("../layout/app")
-@section('title') Crear reserva @stop
+@section('title') Saldo @stop
 <!-- pick -->
 
     <link href="{{asset('vendor/airdatepicker/dist/css/datepicker.min.css')}}" rel="stylesheet" />

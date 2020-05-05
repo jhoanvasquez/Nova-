@@ -46,13 +46,33 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    
+    public function guardar(Request $request)
     {
+        $validate = $request->validate([
+            "name"=> "required|min:3",
+            "apellido" => "required|min:3",
+            "usuario" => "required|unique:App\Usuarios,usuario|min:3",
+            "tipo_usuario"=> "required",
+            "email" => "required|email:rfc,dns|unique:App\Usuarios,email",
+            "contraseña" => "required|min:3",
+            "saldo"=> "required",
+            "avatar" => "required",
+        ]);
+
+        $insert = DB::table('usuarios')->insert([
+            "name"=>  $request->name,
+            "apellido" => $request->apellido,
+            "usuario" => $request->usuario,
+            "tipo_usuario"=> $request->tipo_usuario,
+            "email" => $request->email,
+            "password" => bcrypt($request->contraseña),
+            "saldo"=> $request->saldo,
+            "avatar" => $request->avatar,
+        ]);
         
-        $usuario = $request->except("_token");
-        Usuarios::insert($usuario);
-        return view("confirmacion");
         
+        return  "Él usuario se ha guardado correctamente";
     }
 
     public function busquedaUsuario(Request $request)
@@ -72,7 +92,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        
+        $consultaUsuario = Usuarios::find($id);
+        return view("perfil")
+        ->with("user",$consultaUsuario);
     }
 
     /**

@@ -18,9 +18,10 @@
 <div class="col-lg-12">
     <div class="card mt-5">
         <div class="card-header h3">Nueva Reserva</div>
-            <div class="card-body">
-                    
-                    <form action="{{route('reserva.store')}}" method="POST">
+            <div id="cuerpo" class="card-body ">
+                   
+                    <div id="error"></div>
+                    <form id="form">
                     @csrf 
                         <h5 >Nombre de usuario:</h5>
 
@@ -61,7 +62,7 @@
                         
                              
                     
-                    <input id="newReserva" class="btn btn-primary btn-round mt-2 float-right" type="submit" value="Reservar">                    
+                    <input id="newReserva" class="btn btn-primary btn-round mt-2 float-right" type="button" value="Reservar">                    
                     </form>
             </div>
         </div>
@@ -72,6 +73,7 @@
 @stop
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="{{asset('js/newReserva.js')}}"></script>
 <script>
 
 $(function(){
@@ -81,13 +83,15 @@ $(function(){
     });
 
    $('#date').datepicker({
-    onSelect: function(dateStr) {
+    onSelect: 
+    function (dateStr) {
+        
         $.ajax({
           url: "/reserva/busqueda",
           type:"POST",
           data:{
             "_token": "{{ csrf_token() }}",
-            fecha: $("#date").val()
+            fecha: dateStr
           },
           success:function(response){
             $('.datepicker').hide();
@@ -107,7 +111,7 @@ $(function(){
 
             function bool(array, num, ctrl) {
             $.each(array, function(i, array) {
-                if(array.hora[1]==num){
+                if(array.hora.substring(0, 2)==num){
                 ctrl+=1;   
                 }
                 
@@ -134,7 +138,7 @@ $(function(){
         }
         
         function borrarTr(){
-            for(i = 0; i < 6 ; i++){
+            for(i = 0; i < 15 ; i++){
                 $("#r"+i).remove();
             }
         }

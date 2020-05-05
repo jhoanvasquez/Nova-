@@ -64,8 +64,12 @@
                 <li>
                     <a href="{{ route('saldo.index') }}"><i class="fas fa-cash-register"></i> Recargar saldo</a>
                 </li>
+
+                <li>
+                    <a href="{{ url('reserva/inventario') }}"><i class="fas fa-boxes"></i> Inventario</a>
+                </li>
                 
-                @endif
+                    @endif
                 @endif
             </ul>
         </nav>
@@ -83,7 +87,11 @@
                             <a href="" class="nav-item nav-link dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user"></i> <span>{{ Auth::user()->name }}</span> <i style="font-size: .8em;" class="fas fa-caret-down"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right nav-link-menu">
                                     <ul class="nav-list">
-                                        <li>
+                                        <li><a href="{{route('user.show', Auth::user()->id_user )}}" class="dropdown-item">
+                                            <i class="fas fa-address-card">
+                                                
+                                            </i> Perfil</a>
+                                        </li>
                                         
                                         <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
